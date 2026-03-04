@@ -1,0 +1,50 @@
+step "deploy-a-helm-chart" {
+    name = "Deploy a Helm Chart"
+    properties = {
+        Octopus.Action.TargetRoles = "merchants-k8s"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.GitRepository.Source = "External"
+            Octopus.Action.Helm.ChartDirectory = "charts/merchant-portal"
+            Octopus.Action.Helm.Namespace = "#{Namespace}"
+            Octopus.Action.Helm.ReleaseName = "merchant-portal-#{Octopus.Environment.Slug}-#{Octopus.Deployment.Tenant.Slug}"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Helm.TemplateValuesSources = <<-EOT
+                [
+                  {
+                    "Type": "InlineYaml",
+                    "Value": "env:\n  BRAND_COLOR: #{BrandColor}\n  DATA_REGION: #{DataRegion}"
+                  },
+                  {
+                    "Type": "GitRepository",
+                    "GitRepositorySource": "External",
+                    "GitDependencyName": "TemplateValues-1",
+                    "ValuesFilePaths": "charts/merchant-portal/values.yaml\ncharts/merchant-portal/#{ValuesFile}"
+                  }
+                ]
+                EOT
+            Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+        }
+        tenant_tags = ["Tenant/acme", "Tenant/euro"]
+        worker_pool = "hosted-windows"
+        worker_pool_variable = ""
+
+        git_dependencies {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-41"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/oleksandr-codefresh/finpay-deploy.git"
+        }
+
+        git_dependencies "TemplateValues-1" {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-41"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/oleksandr-codefresh/finpay-deploy.git"
+        }
+    }
+}
