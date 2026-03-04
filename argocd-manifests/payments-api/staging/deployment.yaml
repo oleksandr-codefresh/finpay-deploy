@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: payments-api
-          image: nginx:1.25-alpine
+          image: xeonalex/finpay-payments-api:1.0.0
           ports:
             - containerPort: 80
           env:
