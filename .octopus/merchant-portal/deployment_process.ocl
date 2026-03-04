@@ -9,6 +9,7 @@ step "deploy-a-helm-chart" {
         properties = {
             Octopus.Action.GitRepository.Source = "External"
             Octopus.Action.Helm.ChartDirectory = "charts/merchant-portal"
+            Octopus.Action.Helm.Namespace = "#{Namespace}-#{Octopus.Deployment.Tenant.Slug}"
             Octopus.Action.Helm.ReleaseName = "merchant-portal-#{Octopus.Environment.Slug}-#{Octopus.Deployment.Tenant.Slug}"
             Octopus.Action.Helm.ResetValues = "True"
             Octopus.Action.Helm.TemplateValuesSources = <<-EOT
