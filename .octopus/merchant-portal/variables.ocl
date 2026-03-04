@@ -1,0 +1,13 @@
+variable "Project.ValuesFile" {
+    value "values-development.yaml" {
+        environment = ["development"]
+    }
+
+    value "values-staging.yaml" {
+        environment = ["staging"]
+    }
+
+    value "values-production.yaml" {
+        environment = ["production"]
+    }
+}
