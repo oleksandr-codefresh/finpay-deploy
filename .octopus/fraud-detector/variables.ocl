@@ -25,3 +25,9 @@ variable "ValuesFile" {
         environment = ["staging"]
     }
 }
+
+variable "MyOtherVariable" {
+    type = "WorkerPool"
+
+    value "hosted-ubuntu" {}
+}
