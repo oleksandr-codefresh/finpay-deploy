@@ -1,0 +1,27 @@
+variable "Namespace" {
+    value "fraud-dev" {
+        environment = ["development"]
+    }
+
+    value "fraud-staging\t" {
+        environment = ["staging"]
+    }
+
+    value "fraud-prod" {
+        environment = ["production"]
+    }
+}
+
+variable "ValuesFile" {
+    value "values-development.yaml" {
+        environment = ["development"]
+    }
+
+    value "values-production.yaml" {
+        environment = ["production"]
+    }
+
+    value "values-staging.yaml" {
+        environment = ["staging"]
+    }
+}
